@@ -12,10 +12,18 @@ function getSnapshot() {
   return document.documentElement.dataset.splashComplete === 'true'
 }
 
+function getRunSnapshot() {
+  return document.documentElement.dataset.splashRun === 'true'
+}
+
 function getServerSnapshot() {
   return false
 }
 
 export function useSplashComplete() {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+}
+
+export function useSplashRun() {
+  return useSyncExternalStore(subscribe, getRunSnapshot, getServerSnapshot)
 }

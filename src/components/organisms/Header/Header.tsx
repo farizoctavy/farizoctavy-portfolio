@@ -12,9 +12,9 @@ import { MobileMenu } from '@/components/molecules/MobileMenu'
 import { NavLink } from '@/components/molecules/NavLink'
 import type { NavigationContent } from '@/data/nav'
 import type { Locale } from '@/data/site'
-import { useActiveSection } from '@/hooks/useActiveSection'
+import { useCurrentPath } from '@/hooks/useCurrentPath'
 import { useRollingText } from '@/hooks/useRollingText'
-import { useSplashComplete } from '@/hooks/useSplashComplete'
+import { useSplashComplete, useSplashRun } from '@/hooks/useSplashComplete'
 import { cn } from '@/lib/utils'
 
 export interface HeaderProps {
@@ -29,9 +29,15 @@ export function Header({ content }: HeaderProps) {
   const [locale, setLocale] = useState<Locale>('en')
   const headerRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
-  const activeId = useActiveSection(content.items)
+  const currentPath =
+    useCurrentPath().replace(/\/+$/, '') || '/'
+  const isHome = currentPath === '/'
+  const activeId =
+    content.items.find((item) => item.href === currentPath)?.id ?? null
   const ctaRoll = useRollingText()
   const splashComplete = useSplashComplete()
+  const splashRun = useSplashRun()
+  const splashNavigationAnimation = isHome && splashComplete && splashRun
 
   useEffect(() => {
     const updateScrollState = () => setIsScrolled(window.scrollY > 8)
@@ -116,7 +122,7 @@ export function Header({ content }: HeaderProps) {
       ref={headerRef}
       className={cn(
         'fixed inset-x-0 top-0 z-50 w-full border-b transition-[background-color,border-color,backdrop-filter] duration-200 ease-out',
-        splashComplete && 'motion-safe:animate-page-enter',
+        splashNavigationAnimation && 'motion-safe:animate-page-enter',
         isScrolled
           ? 'border-border-30 bg-border-10/80 backdrop-blur-header'
           : 'border-transparent bg-transparent',
@@ -130,7 +136,11 @@ export function Header({ content }: HeaderProps) {
             <ul className="flex items-center gap-6">
               {content.items.map((item) => (
                 <li key={item.id}>
-                  <NavLink active={activeId === item.id} item={item} />
+                  <NavLink
+                    active={activeId === item.id}
+                    animateActive={splashNavigationAnimation}
+                    item={item}
+                  />
                 </li>
               ))}
             </ul>
@@ -186,6 +196,7 @@ export function Header({ content }: HeaderProps) {
         isOpen={isMenuOpen}
         locale={locale}
         menuId="mobile-navigation"
+        navigationAnimation={splashNavigationAnimation}
         onClose={handleMenuClose}
         onLocaleChange={setLocale}
       />

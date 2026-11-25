@@ -30,9 +30,9 @@ export const navContent: NavigationContent = {
     ariaLabel: 'farizoctavy portfolio, home',
   },
   items: [
-    { id: 'work', label: 'Work', href: '#work' },
-    { id: 'about', label: 'About', href: '#about' },
-    { id: 'interest', label: 'myInterest', href: '#interest' },
+    { id: 'work', label: 'Work', href: '/work' },
+    { id: 'about', label: 'About', href: '/about' },
+    { id: 'interest', label: 'myInterest', href: '/my-interest' },
   ],
   language: {
     en: 'EN',
@@ -40,7 +40,7 @@ export const navContent: NavigationContent = {
   },
   callToAction: {
     label: 'Get in Touch',
-    href: '#contact',
+    href: 'mailto:faizoctavy@gmail.com',
   },
 }
 import logoIcon from '@/assets/farizoctavy-Logo.svg'

@@ -12,10 +12,14 @@ import { SPLASH_COMPLETE_EVENT } from '@/hooks/useSplashComplete'
 
 type SplashPhase = 'branding' | 'exiting'
 
+export interface SplashScreenProps {
+  onComplete?: () => void
+}
+
 const BRANDING_HOLD_DURATION = 0.65
 const EXIT_DURATION = 1.1
 
-export function SplashScreen() {
+export function SplashScreen({ onComplete }: SplashScreenProps) {
   const prefersReducedMotion = usePrefersReducedMotion()
   const [phase, setPhase] = useState<SplashPhase>('branding')
   const [brandingRevealed, setBrandingRevealed] = useState(false)
@@ -53,7 +57,8 @@ export function SplashScreen() {
 
     document.documentElement.dataset.splashComplete = 'true'
     window.dispatchEvent(new Event(SPLASH_COMPLETE_EVENT))
-  }, [isVisible])
+    onComplete?.()
+  }, [isVisible, onComplete])
 
   if (!isVisible) {
     return null

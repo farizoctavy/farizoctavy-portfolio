@@ -17,6 +17,7 @@ export interface MobileMenuProps {
   isOpen: boolean
   locale: Locale
   menuId: string
+  navigationAnimation: boolean
   onClose: () => void
   onLocaleChange: (locale: Locale) => void
 }
@@ -27,6 +28,7 @@ export function MobileMenu({
   isOpen,
   locale,
   menuId,
+  navigationAnimation,
   onClose,
   onLocaleChange,
 }: MobileMenuProps) {
@@ -105,6 +107,7 @@ export function MobileMenu({
                 <motion.li key={item.id} variants={menuItemVariants}>
                   <NavLink
                     active={activeId === item.id}
+                    animateActive={navigationAnimation}
                     item={item}
                     mobile
                     onNavigate={onClose}

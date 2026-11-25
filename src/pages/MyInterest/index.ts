@@ -1,0 +1,1 @@
+export { MyInterest } from './MyInterest'
