@@ -81,6 +81,9 @@
   --text-section-heading-tablet: clamp(2.5rem, 4vw, 3.25rem);
   --text-introduction-mobile: clamp(1.5rem, 6vw, 1.75rem);
   --text-card-title-mobile: 1.25rem;
+  --text-not-found: clamp(4.5rem, 20vw, 10rem);
+  --not-found-stage-mobile: 14rem;
+  --not-found-stage: clamp(20rem, 30vw, 30rem);
 
   /* Independent leading and tracking tokens */
   --leading-default: 1.5;
