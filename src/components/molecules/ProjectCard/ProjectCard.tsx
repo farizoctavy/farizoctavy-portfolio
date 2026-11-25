@@ -1,9 +1,11 @@
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline'
 import { motion } from 'motion/react'
+import type { MouseEvent } from 'react'
 
 import type { Project } from '@/data/projects'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { useSplashComplete } from '@/hooks/useSplashComplete'
+import { getAppHref, navigateTo } from '@/lib/navigation'
 
 export interface ProjectCardProps {
   index?: number
@@ -13,6 +15,23 @@ export interface ProjectCardProps {
 export function ProjectCard({ index = 0, project }: ProjectCardProps) {
   const prefersReducedMotion = usePrefersReducedMotion()
   const splashComplete = useSplashComplete()
+
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      !project.href.startsWith('/')
+    ) {
+      return
+    }
+
+    event.preventDefault()
+    navigateTo(project.href)
+  }
 
   return (
     <motion.li
@@ -38,7 +57,12 @@ export function ProjectCard({ index = 0, project }: ProjectCardProps) {
       <a
         aria-label={`View ${project.title} project`}
         className="group block px-0 py-5 transition-[padding-left,padding-right] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-0 focus-visible:px-0 focus-visible:outline-none motion-reduce:transition-none md:grid md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8 md:px-6 md:py-6 md:hover:px-14 md:focus-visible:px-14 lg:gap-12 lg:px-8 lg:py-8 lg:hover:px-16 lg:focus-visible:px-16"
-        href={project.href}
+        href={
+          project.href.startsWith('/')
+            ? getAppHref(project.href)
+            : project.href
+        }
+        onClick={handleClick}
       >
         <div
           aria-label={project.imageSrc ? undefined : `${project.title} thumbnail coming soon`}

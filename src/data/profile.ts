@@ -25,7 +25,7 @@ export const profileContent: ProfileContent = {
   description:
     'Experienced in web and mobile product work across agency and community-led projects, with a focus on usability, user-centered design, and scalable solutions.',
   seeAll: {
-    href: '#about',
+    href: '/about',
     label: 'See all',
   },
   experiences: [
