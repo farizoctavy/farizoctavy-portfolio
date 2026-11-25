@@ -4,10 +4,8 @@ import { AnimatePresence, motion } from 'motion/react'
 import { Button } from '@/components/atoms/Button'
 import { Icon } from '@/components/atoms/Icon'
 import { RollingText } from '@/components/atoms/RollingText'
-import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher'
 import { NavLink } from '@/components/molecules/NavLink'
 import type { NavigationContent } from '@/data/nav'
-import type { Locale } from '@/data/site'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { useRollingText } from '@/hooks/useRollingText'
 
@@ -15,22 +13,18 @@ export interface MobileMenuProps {
   activeId: string | null
   content: NavigationContent
   isOpen: boolean
-  locale: Locale
   menuId: string
   navigationAnimation: boolean
   onClose: () => void
-  onLocaleChange: (locale: Locale) => void
 }
 
 export function MobileMenu({
   activeId,
   content,
   isOpen,
-  locale,
   menuId,
   navigationAnimation,
   onClose,
-  onLocaleChange,
 }: MobileMenuProps) {
   const prefersReducedMotion = usePrefersReducedMotion()
   const ctaRoll = useRollingText()
@@ -95,13 +89,6 @@ export function MobileMenu({
           variants={menuContentVariants}
           animate="visible"
         >
-            <div className="flex justify-center py-6">
-              <LanguageSwitcher
-                labels={content.language}
-                locale={locale}
-                onChange={onLocaleChange}
-              />
-            </div>
             <ul className="border-t border-border-30">
               {content.items.map((item) => (
                 <motion.li key={item.id} variants={menuItemVariants}>

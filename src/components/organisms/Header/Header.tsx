@@ -3,15 +3,12 @@ import { useEffect, useRef, useState } from 'react'
 import type { FocusEvent, PointerEvent as ReactPointerEvent } from 'react'
 
 import { Button } from '@/components/atoms/Button'
-import { Divider } from '@/components/atoms/Divider'
 import { Icon } from '@/components/atoms/Icon'
 import { Logo } from '@/components/atoms/Logo'
 import { RollingText } from '@/components/atoms/RollingText'
-import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher'
 import { MobileMenu } from '@/components/molecules/MobileMenu'
 import { NavLink } from '@/components/molecules/NavLink'
 import type { NavigationContent } from '@/data/nav'
-import type { Locale } from '@/data/site'
 import { useCurrentPath } from '@/hooks/useCurrentPath'
 import { useRollingText } from '@/hooks/useRollingText'
 import { useSplashComplete, useSplashRun } from '@/hooks/useSplashComplete'
@@ -26,7 +23,6 @@ const desktopBreakpoint = '(min-width: 64rem)'
 export function Header({ content }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [locale, setLocale] = useState<Locale>('en')
   const headerRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const currentPath =
@@ -144,13 +140,7 @@ export function Header({ content }: HeaderProps) {
                 </li>
               ))}
             </ul>
-          </nav>
-          <Divider />
-          <LanguageSwitcher
-            labels={content.language}
-            locale={locale}
-            onChange={setLocale}
-          />
+            </nav>
           <Button
             fillOnHover
             href={content.callToAction.href}
@@ -197,11 +187,9 @@ export function Header({ content }: HeaderProps) {
         activeId={activeId}
         content={content}
         isOpen={isMenuOpen}
-        locale={locale}
         menuId="mobile-navigation"
         navigationAnimation={splashNavigationAnimation}
         onClose={handleMenuClose}
-        onLocaleChange={setLocale}
       />
     </header>
   )

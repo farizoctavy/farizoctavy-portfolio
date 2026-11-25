@@ -12,10 +12,6 @@ export interface NavigationContent {
     ariaLabel: string
   }
   items: NavItem[]
-  language: {
-    en: string
-    id: string
-  }
   callToAction: {
     label: string
     href: string
@@ -34,10 +30,6 @@ export const navContent: NavigationContent = {
     { id: 'about', label: 'About', href: '/about' },
     { id: 'interest', label: 'myInterest', href: '/my-interest' },
   ],
-  language: {
-    en: 'EN',
-    id: 'ID',
-  },
   callToAction: {
     label: 'Get in Touch',
     href: 'mailto:faizoctavy@gmail.com',
