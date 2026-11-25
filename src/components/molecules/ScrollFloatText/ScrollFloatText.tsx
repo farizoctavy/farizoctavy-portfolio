@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 
-import ScrollFloat from '@/components/vendor/reactbits/ScrollFloat'
+const ScrollFloat = lazy(() => import('@/components/vendor/reactbits/ScrollFloat'))
 
 export interface ScrollFloatTextProps {
   children: ReactNode
@@ -14,22 +14,30 @@ export function ScrollFloatText({
   textClassName = 'm-0',
 }: ScrollFloatTextProps) {
   return (
-    <ScrollFloat
-      animationDuration={1.1}
-      containerClassName={containerClassName}
-      direction="up"
-      distance={80}
-      effect="float"
-      ease="power3.out"
-      order="start"
-      scrollEnd="bottom bottom-=30%"
-      scrollStart="center bottom+=30%"
-      splitBy="chars"
-      stagger={0.04}
-      stretch={1.4}
-      textClassName={textClassName}
+    <Suspense
+      fallback={
+        <span className={containerClassName}>
+          <span className={textClassName}>{children}</span>
+        </span>
+      }
     >
-      {children}
-    </ScrollFloat>
+      <ScrollFloat
+        animationDuration={1.1}
+        containerClassName={containerClassName}
+        direction="up"
+        distance={80}
+        effect="float"
+        ease="power3.out"
+        order="start"
+        scrollEnd="bottom bottom-=30%"
+        scrollStart="center bottom+=30%"
+        splitBy="chars"
+        stagger={0.04}
+        stretch={1.4}
+        textClassName={textClassName}
+      >
+        {children}
+      </ScrollFloat>
+    </Suspense>
   )
 }

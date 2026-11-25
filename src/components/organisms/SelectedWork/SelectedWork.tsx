@@ -39,7 +39,7 @@ export function SelectedWork({ projects }: SelectedWorkProps) {
 
       <motion.ul
         aria-label="Selected projects"
-        className="mt-10"
+        className="mt-8 md:mt-10"
       >
         {projects.map((project, index) => (
           <ProjectCard key={project.title} index={index} project={project} />

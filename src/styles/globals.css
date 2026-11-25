@@ -236,11 +236,6 @@
     margin-inline: auto;
   }
 
-  .focus-ring {
-    outline: 2px solid var(--color-primary-main);
-    outline-offset: 3px;
-  }
-
   .touch-target {
     min-width: 2.75rem;
     min-height: 2.75rem;
@@ -332,22 +327,52 @@
     content: '';
   }
 
-  .greeting-hit-area {
-    position: relative;
-  }
-
-  .greeting-hit-area::before {
-    position: absolute;
-    inset: calc(var(--spacing) * -2);
-    content: '';
-  }
-
   .press-scale:active {
     transform: scale(var(--scale-pressed));
   }
 
   .logo-name {
     display: inline;
+  }
+
+  .mobile-introduction {
+    font-size: var(--text-introduction-mobile);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-card-title);
+  }
+
+  .mobile-experience-title,
+  .mobile-project-title {
+    font-size: var(--text-card-title-mobile);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-card-title);
+  }
+
+  .mobile-experience-company {
+    font-size: var(--text-body-l);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-background-label {
+    font-size: var(--text-body-l);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-background-value {
+    font-size: var(--text-card-title-mobile);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-card-title);
+  }
+
+  .mobile-profile-copy {
+    font-size: var(--text-body-l);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-background-copy {
+    font-size: var(--text-body-l);
   }
 
 }
@@ -361,6 +386,40 @@
 @media (min-width: 48rem) {
   .hero-heading {
     font-size: var(--text-hero);
+  }
+
+  .mobile-introduction {
+    font-size: var(--text-h4);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-experience-title {
+    font-size: var(--text-h6);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-experience-company,
+  .mobile-project-title {
+    font-size: var(--text-h7);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-background-label {
+    font-size: var(--text-h8);
+  }
+
+  .mobile-background-value {
+    font-size: var(--text-h6);
+    line-height: var(--leading-default);
+  }
+
+  .mobile-profile-copy,
+  .mobile-background-copy {
+    font-size: var(--text-body-xl);
+  }
+
+  .mobile-profile-copy {
+    line-height: var(--leading-snug);
   }
 
   .content-container {
@@ -384,6 +443,14 @@
 
   .footer-wordmark-fallback {
     font-size: var(--text-footer-wordmark);
+  }
+
+  .mobile-background-label {
+    font-size: var(--text-h7);
+  }
+
+  .mobile-background-copy {
+    font-size: var(--text-body-l);
   }
 }
 

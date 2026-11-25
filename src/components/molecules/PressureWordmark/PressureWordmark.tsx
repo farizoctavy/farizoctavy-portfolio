@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 
-import TechText from '@/components/vendor/reactbits/TechText'
-import TextPressure from '@/components/vendor/reactbits/TextPressure'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import interTightFontUrl from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url'
+
+const TechText = lazy(() => import('@/components/vendor/reactbits/TechText'))
+const TextPressure = lazy(() => import('@/components/vendor/reactbits/TextPressure'))
 
 export interface PressureWordmarkProps {
   className?: string
@@ -31,13 +32,19 @@ export function PressureWordmark({ className, text }: PressureWordmarkProps) {
 
   const interactive = isReady && supportsPressure && !prefersReducedMotion
 
+  const fallback = (
+    <span className="footer-wordmark-fallback absolute inset-0 flex items-center whitespace-nowrap text-border-10">
+      {text}
+    </span>
+  )
+
   return (
     <div
       aria-hidden="true"
       className={cn('footer-wordmark-shell relative w-full overflow-visible', className)}
     >
       {interactive ? (
-        <>
+        <Suspense fallback={fallback}>
           <TextPressure
             alpha={false}
             clickRipple={false}
@@ -69,7 +76,7 @@ export function PressureWordmark({ className, text }: PressureWordmarkProps) {
               draggable={false}
               fontFamily="Inter Tight"
               fontSize={256}
-               fontWeight={700}
+              fontWeight={700}
               labels={false}
               letterSpacing={-0.08}
               reveal="letter"
@@ -79,11 +86,9 @@ export function PressureWordmark({ className, text }: PressureWordmarkProps) {
               text={text}
             />
           </div>
-        </>
+        </Suspense>
       ) : (
-        <span className="footer-wordmark-fallback absolute inset-0 flex items-center whitespace-nowrap text-border-10">
-          {text}
-        </span>
+        fallback
       )}
     </div>
   )

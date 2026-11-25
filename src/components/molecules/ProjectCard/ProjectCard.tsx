@@ -37,7 +37,7 @@ export function ProjectCard({ index = 0, project }: ProjectCardProps) {
     >
       <a
         aria-label={`View ${project.title} project`}
-        className="group block px-4 py-4 transition-[padding-left,padding-right] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-12 focus-visible:px-12 focus-visible:outline-none motion-reduce:transition-none md:grid md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8 md:px-6 md:py-6 md:hover:px-14 md:focus-visible:px-14 lg:gap-12 lg:px-8 lg:py-8 lg:hover:px-16 lg:focus-visible:px-16"
+        className="group block px-0 py-5 transition-[padding-left,padding-right] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-0 focus-visible:px-0 focus-visible:outline-none motion-reduce:transition-none md:grid md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8 md:px-6 md:py-6 md:hover:px-14 md:focus-visible:px-14 lg:gap-12 lg:px-8 lg:py-8 lg:hover:px-16 lg:focus-visible:px-16"
         href={project.href}
       >
         <div
@@ -49,6 +49,8 @@ export function ProjectCard({ index = 0, project }: ProjectCardProps) {
             <img
               alt={project.imageAlt}
               className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+              decoding="async"
+              loading={index === 0 ? 'eager' : 'lazy'}
               src={project.imageSrc}
             />
           ) : (
@@ -58,10 +60,10 @@ export function ProjectCard({ index = 0, project }: ProjectCardProps) {
           )}
         </div>
 
-        <div className="mt-5 flex min-w-0 flex-col justify-between md:mt-0">
+        <div className="mt-4 flex min-w-0 flex-col justify-between md:mt-0">
           <div>
             <div className="flex items-start justify-between gap-4">
-              <h3 className="min-w-0 text-h7-bold leading-tight tracking-tight text-title-100">
+              <h3 className="mobile-project-title min-w-0 tracking-tight text-title-100">
                 {project.title}
               </h3>
               <span
@@ -71,12 +73,12 @@ export function ProjectCard({ index = 0, project }: ProjectCardProps) {
                 <ArrowUpRightIcon className="size-6" />
               </span>
             </div>
-            <p className="mt-3 max-w-prose text-body-l-regular text-body-70">
+            <p className="mt-2 max-w-prose text-body-l-regular leading-snug text-body-70">
               {project.description}
             </p>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-body-m-regular text-body-70">
+          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-body-m-regular text-body-70">
             <span>{project.category}</span>
             <span aria-hidden="true" className="size-1 rounded-full bg-body-70" />
             <span>{project.date}</span>

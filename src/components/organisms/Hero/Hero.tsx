@@ -1,4 +1,4 @@
-import type { FocusEvent, PointerEvent } from 'react'
+import { lazy, Suspense, type FocusEvent, type PointerEvent } from 'react'
 import { motion } from 'motion/react'
 
 import { Badge } from '@/components/atoms/Badge'
@@ -7,7 +7,6 @@ import { Heading } from '@/components/atoms/Heading'
 import { Icon } from '@/components/atoms/Icon'
 import { RollingText } from '@/components/atoms/RollingText'
 import { ScrollFloatText } from '@/components/molecules/ScrollFloatText'
-import RotatingText from '@/components/vendor/reactbits/RotatingText'
 import { Text } from '@/components/atoms/Text'
 import type { HeroContent } from '@/data/hero'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
@@ -18,6 +17,8 @@ import {
   revealContainerVariants,
   revealItemVariants,
 } from '@/lib/motion'
+
+const RotatingText = lazy(() => import('@/components/vendor/reactbits/RotatingText'))
 
 export interface HeroProps {
   content: HeroContent
@@ -98,17 +99,19 @@ export function Hero({ content }: HeroProps) {
           <span className="hero-role-line flex max-w-full flex-wrap items-baseline justify-center">
             <span>as a</span>
             <span className="hero-role-box inline-flex max-w-[var(--hero-role-max-width)] shrink-0 rounded-none bg-primary-main text-border-10 font-bold whitespace-nowrap">
-              <RotatingText
-                auto={!prefersReducedMotion}
-                direction="up"
-                effect="slide"
-                highlight
-                highlightColor="transparent"
-                mainClassName="whitespace-nowrap"
-                rotationInterval={2800}
-                splitBy="characters"
-                texts={content.roles}
-              />
+              <Suspense fallback={content.roles[0]}>
+                <RotatingText
+                  auto={!prefersReducedMotion}
+                  direction="up"
+                  effect="slide"
+                  highlight
+                  highlightColor="transparent"
+                  mainClassName="whitespace-nowrap"
+                  rotationInterval={2800}
+                  splitBy="characters"
+                  texts={content.roles}
+                />
+              </Suspense>
             </span>
           </span>
         </ScrollFloatText>

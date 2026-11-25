@@ -1,5 +1,4 @@
 import '@fontsource-variable/inter-tight'
-import '@fontsource-variable/nunito'
 import '@/styles/globals.css'
 
 import { StrictMode } from 'react'

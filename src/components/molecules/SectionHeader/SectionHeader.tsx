@@ -59,14 +59,14 @@ export function SectionHeader({
 
   return (
     <motion.div
-      className="flex flex-col items-start gap-6 text-left lg:flex-row lg:items-center lg:justify-between"
+      className="flex flex-col items-start gap-5 text-left lg:flex-row lg:items-center lg:justify-between lg:gap-6"
       variants={revealItemVariants}
     >
       <div>
         <p className="text-body-m-regular text-body-60">{eyebrow}</p>
         <Heading
           as={headingAs}
-          className="mt-2 text-[length:var(--text-h1)] font-medium tracking-tight text-title-100"
+          className="mt-2 text-[length:var(--text-section-heading-mobile)] font-medium leading-[var(--leading-section-heading)] tracking-tight text-title-100 md:text-[length:var(--text-section-heading-tablet)] lg:text-[length:var(--text-h1)] lg:leading-[var(--leading-default)]"
           id={headingId}
         >
           {heading}

@@ -41,7 +41,7 @@ export function ContactCallout({ content }: ContactCalloutProps) {
         <span>{content.headline.primary}</span>
         <span className="text-body-60">{content.headline.muted}</span>
       </ScrollFloatText>
-      <div className="mt-8 flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-8">
+      <div className="mt-8 flex flex-col items-start gap-6 md:flex-row md:items-center md:gap-8">
         <Button
           className="shrink-0 px-4 md:px-6"
           href={content.contact.href}
@@ -55,7 +55,7 @@ export function ContactCallout({ content }: ContactCalloutProps) {
           </RollingText>
         </Button>
         <FooterLink
-          className="min-w-0 text-body-m-regular md:text-body-l-regular"
+          className="min-w-0 text-body-l-regular md:text-body-l-regular"
           href={content.contact.href}
           label={content.email}
           underline

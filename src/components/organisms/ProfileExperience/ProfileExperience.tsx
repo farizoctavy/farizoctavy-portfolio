@@ -21,7 +21,7 @@ export function ProfileExperience({ content }: ProfileExperienceProps) {
   return (
     <motion.section
       aria-labelledby="profile-experience-title"
-      className="content-container py-16 text-left md:py-20 lg:py-28"
+      className="content-container py-14 text-left md:py-20 lg:py-28"
       animate={prefersReducedMotion ? 'visible' : undefined}
       id="about"
       initial={prefersReducedMotion ? false : 'hidden'}
@@ -42,20 +42,20 @@ export function ProfileExperience({ content }: ProfileExperienceProps) {
 
       <div className="mt-10 grid gap-12 md:mt-20 md:gap-20 lg:mt-24 lg:grid-cols-2 lg:gap-16">
         <motion.div
-          className="mx-auto max-w-prose lg:mx-0"
+          className="mx-0 w-full max-w-none lg:max-w-prose"
           variants={revealItemVariants}
         >
-          <p className="text-h5-bold leading-tight tracking-tight text-title-90 md:text-h4-bold">
+          <p className="mobile-introduction tracking-tight text-title-90">
             {content.introduction}
           </p>
-          <p className="mt-10 text-body-xl-regular leading-snug text-body-70 lg:mt-6">
+          <p className="mobile-profile-copy mt-6 text-body-70 md:mt-10 lg:mt-6">
             {content.description}
           </p>
         </motion.div>
 
         <motion.div
           aria-label="Professional experience"
-          className="mx-auto w-full max-w-3xl lg:mx-0"
+          className="mx-0 w-full max-w-none lg:max-w-3xl"
           variants={revealItemVariants}
         >
           {content.experiences.map((experience, index) => (
@@ -63,12 +63,12 @@ export function ProfileExperience({ content }: ProfileExperienceProps) {
               className="py-6 first:pt-0 last:pb-0"
               key={`${experience.company}-${experience.title}`}
             >
-              <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-baseline lg:justify-between lg:gap-6">
+              <div className="flex flex-col items-start gap-4 md:gap-8 lg:flex-row lg:items-baseline lg:justify-between lg:gap-6">
                 <div>
-                  <h3 className="text-h6-bold leading-tight tracking-tight text-title-100">
+                  <h3 className="mobile-experience-title tracking-tight text-title-100">
                     {experience.title}
                   </h3>
-                  <p className="mt-2 text-h7-bold text-title-90 lg:mt-1">
+                  <p className="mobile-experience-company mt-1 text-title-90 md:mt-2 lg:mt-1">
                     {experience.company}
                   </p>
                 </div>
@@ -76,11 +76,11 @@ export function ProfileExperience({ content }: ProfileExperienceProps) {
                   {experience.period}
                 </p>
               </div>
-              <p className="mt-10 text-body-l-regular leading-snug text-body-70 lg:mt-6">
+              <p className="mt-6 text-body-l-regular leading-snug text-body-70 md:mt-10 lg:mt-6">
                 {experience.description}
               </p>
               {index < content.experiences.length - 1 && (
-                <Divider className="mt-8 lg:mt-6" orientation="horizontal" />
+                <Divider className="mt-6 lg:mt-6" orientation="horizontal" />
               )}
             </article>
           ))}

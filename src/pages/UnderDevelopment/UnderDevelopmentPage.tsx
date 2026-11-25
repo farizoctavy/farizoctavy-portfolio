@@ -17,12 +17,12 @@ export function UnderDevelopmentPage({
         className="content-container flex min-h-[calc(100svh-var(--header-height))] flex-col items-center justify-center py-20 text-center"
       >
         <Heading
-          className="text-[length:var(--text-h1)] font-medium tracking-tight text-title-100"
+          className="text-[length:var(--text-section-heading-mobile)] font-medium leading-[var(--leading-section-heading)] tracking-tight text-title-100 md:text-[length:var(--text-section-heading-tablet)] lg:text-[length:var(--text-h1)] lg:leading-[var(--leading-default)]"
           id="under-development-title"
         >
           404
         </Heading>
-        <p className="mt-6 max-w-prose text-body-xl-regular text-body-70">
+        <p className="mt-5 max-w-prose text-body-l-regular text-body-70 md:mt-6 md:text-body-xl-regular">
           This page is currently under development.
         </p>
         <p className="mt-2 text-body-l-regular text-body-60">
