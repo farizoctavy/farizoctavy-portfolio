@@ -1,3 +1,9 @@
+export { backgroundContent } from './background'
+export type {
+  BackgroundContent,
+  EducationContent,
+  RecognitionItem,
+} from './background'
 export { footerContent } from './footer'
 export type { FooterContent, FooterSocialLink } from './footer'
 export { heroContent } from './hero'

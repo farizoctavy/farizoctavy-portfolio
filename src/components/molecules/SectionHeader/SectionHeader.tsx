@@ -1,4 +1,4 @@
-import type { FocusEvent, PointerEvent } from 'react'
+import type { FocusEvent, MouseEvent, PointerEvent } from 'react'
 import { motion } from 'motion/react'
 
 import { Button } from '@/components/atoms/Button'
@@ -7,6 +7,7 @@ import { Icon } from '@/components/atoms/Icon'
 import { RollingText } from '@/components/atoms/RollingText'
 import { useRollingText } from '@/hooks/useRollingText'
 import { revealItemVariants } from '@/lib/motion'
+import { getAppHref, navigateTo } from '@/lib/navigation'
 
 export interface SectionHeaderProps {
   eyebrow: string
@@ -39,9 +40,26 @@ export function SectionHeader({
     }
   }
 
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      !seeAllHref.startsWith('/')
+    ) {
+      return
+    }
+
+    event.preventDefault()
+    navigateTo(seeAllHref)
+  }
+
   return (
     <motion.div
-      className="flex flex-col items-center gap-6 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left"
+      className="flex flex-col items-start gap-6 text-left lg:flex-row lg:items-center lg:justify-between"
       variants={revealItemVariants}
     >
       <div>
@@ -56,9 +74,12 @@ export function SectionHeader({
       </div>
 
       <Button
-        className="hero-action"
+        className="section-header-action"
         fillOnHover
-        href={seeAllHref}
+        href={
+          seeAllHref.startsWith('/') ? getAppHref(seeAllHref) : seeAllHref
+        }
+        onClick={handleClick}
         onFocus={handleFocus}
         onPointerEnter={handlePointerEnter}
         rightIcon={<Icon className="size-4" name="arrow-up-right" />}

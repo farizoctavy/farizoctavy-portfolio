@@ -41,7 +41,7 @@ export function ContactCallout({ content }: ContactCalloutProps) {
         <span>{content.headline.primary}</span>
         <span className="text-body-60">{content.headline.muted}</span>
       </ScrollFloatText>
-      <div className="mt-8 flex flex-row items-center gap-2 md:gap-8">
+      <div className="mt-8 flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-8">
         <Button
           className="shrink-0 px-4 md:px-6"
           href={content.contact.href}
@@ -60,7 +60,7 @@ export function ContactCallout({ content }: ContactCalloutProps) {
           label={content.email}
           underline
         />
-        <Divider className="hidden flex-1 md:block" orientation="horizontal" />
+        <Divider className="block w-full md:w-auto md:flex-1" orientation="horizontal" />
       </div>
     </div>
   )

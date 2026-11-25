@@ -67,6 +67,7 @@
   --text-h2: clamp(2.25rem, calc(1.99rem + 1.13vw), 3rem);
   --text-h3: clamp(2rem, calc(1.83rem + 0.75vw), 2.5rem);
   --text-h4: clamp(1.75rem, calc(1.58rem + 0.75vw), 2.25rem);
+  --text-hero-mobile: clamp(1.75rem, 8vw, 2rem);
   --text-hero: clamp(2rem, calc(0.57rem + 7.14vw), 7rem);
   --text-h5: 2rem;
   --text-h6: 1.625rem;
@@ -105,10 +106,11 @@
   --hero-subtext-max-width: 33.75rem;
   --hero-action-max-width: 20rem;
   --text-footer-heading: clamp(2rem, calc(1.33rem + 2.86vw), 4rem);
+  --text-footer-wordmark-mobile: clamp(3.5rem, 20vw, 5rem);
   --text-footer-wordmark: clamp(3.5rem, 18vw, 18rem);
   --footer-wordmark-min-height: 5rem;
   --tracking-wordmark: -0.08em;
-  --font-weight-wordmark-rest: 200;
+  --font-weight-wordmark-rest: 700;
   --mobile-menu-link-size: clamp(2.5rem, 12vw, 4rem);
   --mobile-menu-link-padding: 1.5rem;
   --background-grid-opacity: 1;

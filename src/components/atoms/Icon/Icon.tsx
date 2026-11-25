@@ -4,6 +4,7 @@ export type IconName =
   | 'arrow-right'
   | 'arrow-up'
   | 'arrow-up-right'
+  | 'bars-3-bottom-right'
   | 'close'
   | 'globe'
   | 'menu'
@@ -62,6 +63,15 @@ export function Icon({ name, className }: IconProps) {
       {name === 'arrow-up-right' && (
         <path
           d="M5 19 19 5m-8 0h8v8"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.75"
+        />
+      )}
+      {name === 'bars-3-bottom-right' && (
+        <path
+          d="M3.75 6.75h16.5M3.75 12h16.5m-9.75 5.25h9.75"
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"

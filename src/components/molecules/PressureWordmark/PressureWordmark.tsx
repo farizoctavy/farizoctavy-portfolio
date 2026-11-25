@@ -69,7 +69,7 @@ export function PressureWordmark({ className, text }: PressureWordmarkProps) {
               draggable={false}
               fontFamily="Inter Tight"
               fontSize={256}
-              fontWeight={200}
+               fontWeight={700}
               labels={false}
               letterSpacing={-0.08}
               reveal="letter"

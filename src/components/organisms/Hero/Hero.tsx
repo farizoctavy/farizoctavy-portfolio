@@ -57,7 +57,7 @@ export function Hero({ content }: HeroProps) {
     <motion.section
       aria-labelledby="hero-title"
       className={cn(
-        'content-container flex min-h-[calc(100svh-var(--header-height))] flex-col items-center justify-center py-12 text-center md:py-16 lg:py-20',
+        'relative -top-6 content-container flex min-h-[calc(100svh-var(--header-height))] flex-col items-center justify-center py-12 text-center md:top-0 md:py-16 lg:py-20',
         !splashComplete && 'invisible',
       )}
       key={splashComplete ? 'splash-complete' : 'splash-pending'}
@@ -82,7 +82,7 @@ export function Hero({ content }: HeroProps) {
       </Heading>
       <motion.div
         aria-hidden="true"
-        className="hero-heading mt-8 flex w-full flex-col items-center font-rounded text-title-100"
+        className="hero-heading mt-2 flex w-full flex-col items-center font-rounded text-title-100 lg:mt-8"
         variants={revealItemVariants}
       >
         <ScrollFloatText
@@ -114,8 +114,8 @@ export function Hero({ content }: HeroProps) {
         </ScrollFloatText>
       </motion.div>
 
-      <motion.div className="hero-subtext mt-8" variants={revealItemVariants}>
-        <Text className="text-body-2xl-regular text-body-60 md:text-[1.25rem]">
+      <motion.div className="hero-subtext mt-2 lg:mt-8" variants={revealItemVariants}>
+        <Text className="text-body-xl-regular text-body-60 md:text-[1.25rem]">
           {content.subtext}
         </Text>
       </motion.div>
@@ -125,7 +125,7 @@ export function Hero({ content }: HeroProps) {
         variants={revealItemVariants}
       >
         <Button
-          className="hero-action hover:bg-primary-main focus-visible:bg-primary-main"
+          className="hero-action hero-mobile-action hover:bg-primary-main focus-visible:bg-primary-main"
           href={content.actions.work.href}
           onFocus={handleWorkFocus}
           onPointerEnter={handleWorkPointerEnter}
@@ -140,7 +140,7 @@ export function Hero({ content }: HeroProps) {
           </RollingText>
         </Button>
         <Button
-          className="hero-action"
+          className="hero-action hero-mobile-action"
           fillOnHover
           href={content.actions.contact.href}
           onFocus={handleContactFocus}

@@ -184,7 +184,10 @@ export function Header({ content }: HeaderProps) {
               key={isMenuOpen ? 'close' : 'menu'}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <Icon className="size-6" name={isMenuOpen ? 'close' : 'menu'} />
+              <Icon
+                className="size-6"
+                name={isMenuOpen ? 'close' : 'bars-3-bottom-right'}
+              />
             </motion.span>
           </AnimatePresence>
         </button>

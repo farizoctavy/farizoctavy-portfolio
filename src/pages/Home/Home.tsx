@@ -1,8 +1,10 @@
 import { Hero } from '@/components/organisms/Hero'
 import { Header } from '@/components/organisms/Header'
+import { BackgroundSection } from '@/components/organisms/BackgroundSection'
 import { ProfileExperience } from '@/components/organisms/ProfileExperience'
 import { SelectedWork } from '@/components/organisms/SelectedWork'
 import { MainLayout } from '@/components/templates/MainLayout'
+import { backgroundContent } from '@/data/background'
 import { heroContent } from '@/data/hero'
 import { navContent } from '@/data/nav'
 import { profileContent } from '@/data/profile'
@@ -22,6 +24,7 @@ export function Home() {
         <Hero content={heroContent} />
         <ProfileExperience content={profileContent} />
         <SelectedWork projects={projects} />
+        <BackgroundSection content={backgroundContent} />
       </MainLayout>
     </div>
   )
