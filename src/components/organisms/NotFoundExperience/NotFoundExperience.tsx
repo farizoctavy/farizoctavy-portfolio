@@ -8,6 +8,7 @@ import {
   type PointerEvent,
   type ReactNode,
 } from 'react'
+import { motion } from 'motion/react'
 
 import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
@@ -16,6 +17,10 @@ import { RollingText } from '@/components/atoms/RollingText'
 import { getAppHref, navigateTo } from '@/lib/navigation'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { useRollingText } from '@/hooks/useRollingText'
+import {
+  revealContainerVariants,
+  revealItemVariants,
+} from '@/lib/motion'
 
 const FallingText = lazy(
   () => import('@/components/vendor/reactbits/FallingText'),
@@ -93,14 +98,24 @@ export function NotFoundExperience({
   }
 
   return (
-    <section
+    <motion.section
       aria-labelledby="under-development-title"
       className="not-found-page flex w-full flex-col items-center justify-center px-5 py-10 text-center md:px-8 md:py-12 lg:px-6 lg:py-16"
+      animate={prefersReducedMotion ? 'visible' : undefined}
+      initial={prefersReducedMotion ? false : 'hidden'}
+      variants={revealContainerVariants}
+      viewport={{ amount: 0.2, once: false }}
+      whileInView={!prefersReducedMotion ? 'visible' : undefined}
     >
-      <p className="text-body-m-semibold uppercase tracking-[0.08em] text-body-60">
-        {pageName}
-      </p>
-      <div className="mt-3 h-[var(--not-found-stage-mobile)] w-full max-w-5xl md:mt-4 md:h-[var(--not-found-stage)]">
+      <motion.div variants={revealItemVariants}>
+        <p className="text-body-m-semibold uppercase tracking-[0.08em] text-body-60">
+          {pageName}
+        </p>
+      </motion.div>
+      <motion.div
+        className="mt-3 h-[var(--not-found-stage-mobile)] w-full max-w-5xl md:mt-4 md:h-[var(--not-found-stage)]"
+        variants={revealItemVariants}
+      >
         {prefersReducedMotion ? (
           fallback
         ) : (
@@ -126,37 +141,45 @@ export function NotFoundExperience({
             </FallingTextBoundary>
           </Suspense>
         )}
-      </div>
-      <Heading
-        as="h1"
-        className="mt-1 max-w-3xl text-[length:var(--text-section-heading-mobile)] font-medium leading-[var(--leading-section-heading)] tracking-tight text-title-100 md:mt-2 md:text-[length:var(--text-section-heading-tablet)] lg:text-[length:var(--text-h2)]"
-        id="under-development-title"
-      >
-        404? This page is in its character development era.
-      </Heading>
-      <p className="mt-5 max-w-2xl text-body-l-regular text-body-70 md:mt-6 md:text-body-xl-regular">
-        We&apos;re still cooking this one. The pixels aren&apos;t ready for
-        their big debut just yet.
-      </p>
-      <p className="mt-2 text-body-l-regular text-body-60">
-        Come back later. It&apos;ll be worth the wait.
-      </p>
-      <Button
-        className="hero-action hero-mobile-action hover:bg-primary-main focus-visible:bg-primary-main mt-8"
-        href={getAppHref('/')}
-        onClick={handleHomeClick}
-        onFocus={handleHomeFocus}
-        onPointerEnter={handleHomePointerEnter}
-        rightIcon={<Icon className="size-4" name="arrow-right" />}
-        variant="solid"
-      >
-        <RollingText
-          isPlaying={homeRoll.isPlaying}
-          onAnimationComplete={homeRoll.complete}
+      </motion.div>
+      <motion.div variants={revealItemVariants}>
+        <Heading
+          as="h1"
+          className="mt-1 max-w-3xl text-[length:var(--text-section-heading-mobile)] font-medium leading-[var(--leading-section-heading)] tracking-tight text-title-100 md:mt-2 md:text-[length:var(--text-section-heading-tablet)] lg:text-[var(--text-h2)]"
+          id="under-development-title"
         >
-          Back to Home
-        </RollingText>
-      </Button>
-    </section>
+          404? This page is in its character development era.
+        </Heading>
+      </motion.div>
+      <motion.div variants={revealItemVariants}>
+        <p className="mt-5 max-w-2xl text-body-l-regular text-body-70 md:mt-6 md:text-body-xl-regular">
+          We&apos;re still cooking this one. The pixels aren&apos;t ready for
+          their big debut just yet.
+        </p>
+      </motion.div>
+      <motion.div variants={revealItemVariants}>
+        <p className="mt-2 text-body-l-regular text-body-60">
+          Come back later. It&apos;ll be worth the wait.
+        </p>
+      </motion.div>
+      <motion.div className="mt-8" variants={revealItemVariants}>
+        <Button
+          className="hero-action hero-mobile-action hover:bg-primary-main focus-visible:bg-primary-main"
+          href={getAppHref('/')}
+          onClick={handleHomeClick}
+          onFocus={handleHomeFocus}
+          onPointerEnter={handleHomePointerEnter}
+          rightIcon={<Icon className="size-4" name="arrow-right" />}
+          variant="solid"
+        >
+          <RollingText
+            isPlaying={homeRoll.isPlaying}
+            onAnimationComplete={homeRoll.complete}
+          >
+            Back to Home
+          </RollingText>
+        </Button>
+      </motion.div>
+    </motion.section>
   )
 }
