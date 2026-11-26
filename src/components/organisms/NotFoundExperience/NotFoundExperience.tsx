@@ -95,7 +95,7 @@ export function NotFoundExperience({
   return (
     <section
       aria-labelledby="under-development-title"
-      className="flex min-h-[calc(100dvh-var(--header-height)-var(--main-padding-top))] w-full flex-col items-center justify-center px-5 py-16 text-center md:px-8 md:py-20 lg:min-h-[calc(100dvh-var(--header-height)-var(--main-padding-top-lg))] lg:px-6 lg:pb-32 lg:pt-16"
+      className="flex min-h-[calc(100dvh-var(--header-height)-var(--main-padding-top))] w-full flex-col items-center justify-center px-5 py-10 text-center md:px-8 md:py-12 lg:min-h-[calc(100dvh-var(--header-height)-var(--main-padding-top-lg))] lg:px-6 lg:py-16"
     >
       <p className="text-body-m-semibold uppercase tracking-[0.08em] text-body-60">
         {pageName}

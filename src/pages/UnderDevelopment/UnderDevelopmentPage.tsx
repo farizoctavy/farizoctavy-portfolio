@@ -11,7 +11,7 @@ export function UnderDevelopmentPage({
   pageName,
 }: UnderDevelopmentPageProps) {
   return (
-    <MainLayout header={<Header content={navContent} />} showFooter={false}>
+    <MainLayout header={<Header content={navContent} />}>
       <NotFoundExperience pageName={pageName} />
     </MainLayout>
   )
