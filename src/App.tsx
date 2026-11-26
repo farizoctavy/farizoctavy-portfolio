@@ -6,7 +6,7 @@ import { SplashScreen } from '@/components/organisms/SplashScreen'
 import { SPLASH_COMPLETE_EVENT } from '@/hooks/useSplashComplete'
 import { useCurrentPath } from '@/hooks/useCurrentPath'
 import { useSplashTrigger } from '@/hooks/useSplashTrigger'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 
 export function App() {
   const pathname = useCurrentPath()
@@ -17,9 +17,13 @@ export function App() {
       ? Work
       : pathname === '/about'
         ? About
-        : pathname === '/my-interest'
+      : pathname === '/my-interest'
           ? MyInterest
           : Home
+
+  useLayoutEffect(() => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
+  }, [pathname])
 
   useEffect(() => {
     if (shouldPlay) {
