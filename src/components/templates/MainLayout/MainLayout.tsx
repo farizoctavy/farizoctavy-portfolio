@@ -7,9 +7,14 @@ import { footerContent } from '@/data/footer'
 export interface MainLayoutProps {
   children: ReactNode
   header?: ReactNode
+  showFooter?: boolean
 }
 
-export function MainLayout({ children, header }: MainLayoutProps) {
+export function MainLayout({
+  children,
+  header,
+  showFooter = true,
+}: MainLayoutProps) {
   return (
     <div className="relative isolate flex min-h-dvh flex-col bg-border-10 text-title-100" id="top">
       <Background />
@@ -17,7 +22,7 @@ export function MainLayout({ children, header }: MainLayoutProps) {
       <main className="relative z-10 flex-1 pt-[var(--main-padding-top)] lg:pt-[var(--main-padding-top-lg)]">
         {children}
       </main>
-      <Footer content={footerContent} />
+      {showFooter && <Footer content={footerContent} />}
     </div>
   )
 }
