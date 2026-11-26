@@ -236,6 +236,11 @@
     margin-inline: auto;
   }
 
+  .not-found-page {
+    min-height: calc(100svh - var(--header-height));
+    min-height: calc(100dvh - var(--header-height));
+  }
+
   .touch-target {
     min-width: 2.75rem;
     min-height: 2.75rem;
