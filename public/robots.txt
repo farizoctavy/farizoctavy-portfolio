@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://farizoctavy.github.io/farizoctavy-portfolio/sitemap.xml
