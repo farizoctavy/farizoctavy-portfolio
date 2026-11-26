@@ -14,7 +14,9 @@ export function MainLayout({ children, header }: MainLayoutProps) {
     <div className="relative isolate flex min-h-dvh flex-col bg-border-10 text-title-100" id="top">
       <Background />
       {header}
-      <main className="relative z-10 flex-1 pt-16 lg:pt-18">{children}</main>
+      <main className="relative z-10 flex-1 pt-[var(--main-padding-top)] lg:pt-[var(--main-padding-top-lg)]">
+        {children}
+      </main>
       <Footer content={footerContent} />
     </div>
   )

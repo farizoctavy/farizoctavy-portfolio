@@ -107,6 +107,8 @@
   --blur-header: 12px;
   --scale-pressed: 0.98;
   --header-height: 4rem;
+  --main-padding-top: 4rem;
+  --main-padding-top-lg: 4.5rem;
   --hero-role-padding: 0.2em;
   --hero-role-block-padding: 0.1em;
   --hero-role-max-width: calc(100vw - 2.5rem);
