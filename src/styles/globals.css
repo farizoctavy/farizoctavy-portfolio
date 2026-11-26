@@ -22,7 +22,7 @@
     min-width: 20rem;
     overflow-x: clip;
     scroll-padding-top: var(--header-height);
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   body {

@@ -17,12 +17,13 @@ export function App() {
       ? Work
       : pathname === '/about'
         ? About
-      : pathname === '/my-interest'
+        : pathname === '/my-interest'
           ? MyInterest
           : Home
 
   useLayoutEffect(() => {
-    window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
+    window.history.scrollRestoration = 'manual'
+    window.scrollTo(0, 0)
   }, [pathname])
 
   useEffect(() => {
