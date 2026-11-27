@@ -1,4 +1,5 @@
 import '@fontsource-variable/inter-tight'
+import 'lenis/dist/lenis.css'
 import '@/styles/globals.css'
 
 import { StrictMode } from 'react'

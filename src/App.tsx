@@ -1,4 +1,5 @@
 import { About } from '@/pages/About'
+import Lenis from 'lenis'
 import { Home } from '@/pages/Home'
 import { MyInterest } from '@/pages/MyInterest'
 import { Work } from '@/pages/Work'
@@ -6,11 +7,12 @@ import { SplashScreen } from '@/components/organisms/SplashScreen'
 import { SPLASH_COMPLETE_EVENT } from '@/hooks/useSplashComplete'
 import { useCurrentPath } from '@/hooks/useCurrentPath'
 import { useSplashTrigger } from '@/hooks/useSplashTrigger'
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 export function App() {
   const pathname = useCurrentPath()
   const isHome = pathname === '/'
+  const lenisRef = useRef<Lenis | null>(null)
   const { complete, shouldPlay } = useSplashTrigger(isHome)
   const Page =
     pathname === '/work'
@@ -23,8 +25,23 @@ export function App() {
 
   useLayoutEffect(() => {
     window.history.scrollRestoration = 'manual'
+    lenisRef.current?.scrollTo(0, { immediate: true, force: true })
     window.scrollTo(0, 0)
   }, [pathname])
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+      stopInertiaOnNavigate: true,
+    })
+
+    lenisRef.current = lenis
+
+    return () => {
+      lenis.destroy()
+      lenisRef.current = null
+    }
+  }, [])
 
   useEffect(() => {
     if (shouldPlay) {
