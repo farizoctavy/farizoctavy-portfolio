@@ -1,4 +1,6 @@
 import { About } from '@/pages/About'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { Home } from '@/pages/Home'
 import { MyInterest } from '@/pages/MyInterest'
@@ -8,6 +10,8 @@ import { SPLASH_COMPLETE_EVENT } from '@/hooks/useSplashComplete'
 import { useCurrentPath } from '@/hooks/useCurrentPath'
 import { useSplashTrigger } from '@/hooks/useSplashTrigger'
 import { useEffect, useLayoutEffect, useRef } from 'react'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export function App() {
   const pathname = useCurrentPath()
@@ -31,13 +35,24 @@ export function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      autoRaf: true,
+      autoRaf: false,
       stopInertiaOnNavigate: true,
     })
 
     lenisRef.current = lenis
+    const removeScrollListener = lenis.on('scroll', () =>
+      ScrollTrigger.update(),
+    )
+    const raf = (time: number) => {
+      lenis.raf(time * 1000)
+    }
+
+    gsap.ticker.add(raf)
+    gsap.ticker.lagSmoothing(0)
 
     return () => {
+      gsap.ticker.remove(raf)
+      removeScrollListener()
       lenis.destroy()
       lenisRef.current = null
     }
