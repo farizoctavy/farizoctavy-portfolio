@@ -32,7 +32,7 @@ export const navContent: NavigationContent = {
   ],
   callToAction: {
     label: 'Get in Touch',
-    href: 'mailto:faizoctavy@gmail.com',
+    href: 'mailto:farizoctavy@gmail.com',
   },
 }
 import logoIcon from '@/assets/farizoctavy-Logo.svg'
