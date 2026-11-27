@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { Home } from '@/pages/Home'
 import { MyInterest } from '@/pages/MyInterest'
+import { ProjectDetail } from '@/pages/ProjectDetail'
 import { Work } from '@/pages/Work'
 import { SplashScreen } from '@/components/organisms/SplashScreen'
 import { SPLASH_COMPLETE_EVENT } from '@/hooks/useSplashComplete'
@@ -15,15 +16,19 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function App() {
   const pathname = useCurrentPath()
-  const isHome = pathname === '/'
+  const normalizedPath = pathname.replace(/\/+$/, '') || '/'
+  const isHome = normalizedPath === '/'
+  const workSlug = normalizedPath.startsWith('/work/')
+    ? normalizedPath.slice('/work/'.length)
+    : null
   const lenisRef = useRef<Lenis | null>(null)
   const { complete, shouldPlay } = useSplashTrigger(isHome)
   const Page =
-    pathname === '/work'
+    normalizedPath === '/work'
       ? Work
-      : pathname === '/about'
+      : normalizedPath === '/about'
         ? About
-        : pathname === '/my-interest'
+        : normalizedPath === '/my-interest'
           ? MyInterest
           : Home
 
@@ -75,7 +80,7 @@ export function App() {
   return (
     <>
       {isHome && shouldPlay && <SplashScreen onComplete={complete} />}
-      <Page />
+      {workSlug ? <ProjectDetail slug={workSlug} /> : <Page />}
     </>
   )
 }

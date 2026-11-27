@@ -89,8 +89,8 @@ function FloatingBackdropItem({
         <img
           alt=""
           className={cn(
-            'h-full w-full object-cover object-center grayscale',
-            item.isGhost && 'opacity-45 blur-[1px]',
+            'h-full w-full object-cover object-center',
+            item.isGhost && 'opacity-55 blur-[0.5px]',
           )}
           loading="lazy"
           src={item.imageSrc}
@@ -355,15 +355,17 @@ export function InterestExperience({ content }: InterestExperienceProps) {
               <div
                 className={cn(
                   'w-full overflow-hidden bg-border-20 shadow-card',
-                  chapter.aspectRatio === 'portrait'
-                    ? 'aspect-[4/5] max-w-xs'
-                    : 'aspect-[16/10] max-w-md',
+                  chapter.aspectRatio === 'tall-portrait'
+                    ? 'aspect-[2/3] max-w-xs'
+                    : chapter.aspectRatio === 'portrait'
+                      ? 'aspect-[4/5] max-w-xs'
+                      : 'aspect-[4/3] max-w-md',
                 )}
               >
                 <img
                   alt={chapter.imageAlt}
                   className={cn(
-                    'h-full w-full object-cover grayscale',
+                    'h-full w-full object-cover',
                     chapter.isFuture && 'opacity-30',
                   )}
                   src={chapter.imageSrc}
@@ -507,9 +509,11 @@ export function InterestExperience({ content }: InterestExperienceProps) {
                       aria-label={`Learn more about ${chapter.title}`}
                       className={cn(
                         'group relative overflow-hidden bg-border-20 shadow-soft transition-shadow duration-300 hover:shadow-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-main',
-                        chapter.aspectRatio === 'portrait'
-                          ? 'aspect-[4/5] h-[30dvh] max-h-72 w-auto md:h-[34dvh] md:max-h-84'
-                          : 'aspect-[16/10] w-[80vw] max-w-sm md:w-full md:max-w-md lg:max-w-lg',
+                        chapter.aspectRatio === 'tall-portrait'
+                          ? 'aspect-[2/3] h-[34dvh] max-h-80 w-auto md:h-[38dvh] md:max-h-92'
+                          : chapter.aspectRatio === 'portrait'
+                            ? 'aspect-[4/5] h-[32dvh] max-h-76 w-auto md:h-[36dvh] md:max-h-88'
+                            : 'aspect-[4/3] w-[80vw] max-w-sm md:w-full md:max-w-md lg:max-w-lg',
                       )}
                       onClick={() => setSelectedChapter(chapter)}
                       style={{ x: centerPhotoX, y: centerPhotoY }}
@@ -518,8 +522,8 @@ export function InterestExperience({ content }: InterestExperienceProps) {
                       <img
                         alt={chapter.imageAlt}
                         className={cn(
-                          'h-full w-full object-cover object-center grayscale transition-transform duration-500 ease-out group-hover:scale-105',
-                          chapter.isFuture && 'opacity-25',
+                          'h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105',
+                          chapter.isFuture && 'opacity-35',
                         )}
                         src={chapter.imageSrc}
                       />

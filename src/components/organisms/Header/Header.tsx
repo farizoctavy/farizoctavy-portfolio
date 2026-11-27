@@ -29,7 +29,11 @@ export function Header({ content }: HeaderProps) {
     useCurrentPath().replace(/\/+$/, '') || '/'
   const isHome = currentPath === '/'
   const activeId =
-    content.items.find((item) => item.href === currentPath)?.id ?? null
+    content.items.find(
+      (item) =>
+        item.href === currentPath ||
+        (item.href !== '/' && currentPath.startsWith(`${item.href}/`)),
+    )?.id ?? null
   const ctaRoll = useRollingText()
   const splashComplete = useSplashComplete()
   const splashRun = useSplashRun()

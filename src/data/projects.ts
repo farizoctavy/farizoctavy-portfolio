@@ -18,8 +18,8 @@ export const projects: Project[] = [
     description:
       'A mobile experience that makes parcel delivery easier to manage from pickup to arrival.',
     category: 'Product Design',
-    date: '2025',
-    href: '/work',
+    date: '2026',
+    href: '/work/parcelin',
     imageAlt: 'Parcelin Mobile App project preview',
     imageSrc: parcelinImage,
   },
