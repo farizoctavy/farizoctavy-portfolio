@@ -205,7 +205,7 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
             <motion.img
               alt={content.heroImage.alt}
               animate={{ opacity: 1, scale: 1 }}
-              className="block h-auto max-h-[calc(100dvh-17.5rem)] w-auto max-w-full lg:max-h-[calc(100dvh-20.5rem)]"
+              className="block h-auto max-h-[calc(100svh-17.5rem)] w-auto max-w-full lg:max-h-[calc(100svh-20.5rem)]"
               initial={prefersReducedMotion ? false : { opacity: 0.45, scale: 1.02 }}
               src={content.heroImage.src}
               transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}

@@ -101,7 +101,7 @@ export function AboutShowcase({ content }: AboutShowcaseProps) {
       {/* 1. STATIONARY FULL-BLEED HERO BEHIND RISING WHITE CURTAIN (.ean) */}
       <section
         aria-labelledby="about-hero-title"
-        className="sticky top-0 z-0 flex h-dvh min-h-[34rem] w-full flex-col justify-end overflow-hidden bg-primary-main"
+        className="sticky top-0 z-0 flex h-svh min-h-[34rem] w-full flex-col justify-end overflow-hidden bg-primary-main"
       >
         <motion.img
           alt={content.hero.imageAlt}
@@ -187,7 +187,7 @@ export function AboutShowcase({ content }: AboutShowcaseProps) {
       {/* 2B. SECOND STATIONARY FULL-BLEED BACKGROUND PHOTO (event.png) */}
       <section
         aria-label={content.thesis.editorialPhoto.caption}
-        className="sticky top-0 z-10 flex h-[80dvh] min-h-[30rem] w-full flex-col justify-end overflow-hidden bg-primary-main md:h-dvh"
+        className="sticky top-0 z-10 flex h-[80svh] min-h-[30rem] w-full flex-col justify-end overflow-hidden bg-primary-main md:h-svh"
       >
         <img
           alt={content.thesis.editorialPhoto.imageAlt}
@@ -466,9 +466,9 @@ export function AboutShowcase({ content }: AboutShowcaseProps) {
           aria-label="Capabilities and transition into personal interests"
           className="relative w-full"
           ref={dialTrackRef}
-          style={prefersReducedMotion ? undefined : { height: '190dvh' }}
+          style={prefersReducedMotion ? undefined : { height: '190svh' }}
         >
-          <div className="sticky top-0 flex h-dvh min-h-[36rem] w-full items-center justify-center overflow-hidden bg-border-10">
+          <div className="sticky top-0 flex h-svh min-h-[36rem] w-full items-center justify-center overflow-hidden bg-border-10">
             <motion.div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 bg-primary-main"

@@ -287,8 +287,20 @@ export function InterestExperience({ content }: InterestExperienceProps) {
   const [selectedChapter, setSelectedChapter] =
     useState<InterestChapter | null>(null)
 
+  const lastViewportWidthRef = useRef(0)
+
   useEffect(() => {
-    const updateViewport = () => setViewportHeight(window.innerHeight)
+    const updateViewport = () => {
+      // Ignore vertical-only resizes caused by mobile browser toolbars hiding/showing
+      if (
+        lastViewportWidthRef.current !== 0 &&
+        window.innerWidth === lastViewportWidthRef.current
+      ) {
+        return
+      }
+      lastViewportWidthRef.current = window.innerWidth
+      setViewportHeight(window.innerHeight)
+    }
     updateViewport()
     window.addEventListener('resize', updateViewport)
     return () => window.removeEventListener('resize', updateViewport)
@@ -473,11 +485,11 @@ export function InterestExperience({ content }: InterestExperienceProps) {
       className="relative w-full"
     >
       <div
-        className="relative w-full"
+        className="relative w-full bg-border-10"
         ref={trackRef}
-        style={{ height: `${totalStages * 108}dvh` }}
+        style={{ height: `${totalStages * 108}svh` }}
       >
-        <div className="sticky top-0 flex h-dvh w-full flex-col justify-between overflow-hidden bg-border-10">
+        <div className="sticky top-0 flex h-svh w-full flex-col justify-between overflow-hidden bg-border-10">
           {/* Infinite Bottom-to-Top Rising Gallery Photos + Pointer Parallax */}
           <motion.div
             animate={{ opacity: 1 }}
@@ -588,9 +600,9 @@ export function InterestExperience({ content }: InterestExperienceProps) {
                       className={cn(
                         'group relative overflow-hidden bg-border-20 shadow-soft transition-shadow duration-300 hover:shadow-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-main',
                         chapter.aspectRatio === 'tall-portrait'
-                          ? 'aspect-[2/3] h-[34dvh] max-h-80 w-auto md:h-[38dvh] md:max-h-92'
+                          ? 'aspect-[2/3] h-[34svh] max-h-80 w-auto md:h-[38svh] md:max-h-92'
                           : chapter.aspectRatio === 'portrait'
-                            ? 'aspect-[4/5] h-[32dvh] max-h-76 w-auto md:h-[36dvh] md:max-h-88'
+                            ? 'aspect-[4/5] h-[32svh] max-h-76 w-auto md:h-[36svh] md:max-h-88'
                             : 'aspect-[4/3] w-[80vw] max-w-sm md:w-full md:max-w-md lg:max-w-lg',
                       )}
                       onClick={() => setSelectedChapter(chapter)}
