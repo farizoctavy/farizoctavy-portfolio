@@ -231,20 +231,20 @@ export const interestContent: InterestPageContent = {
       id: 'running',
       indexLabel: '02',
       shortLabel: 'Running',
-      title: 'Running & Pace Logs',
-      captionTitle: 'Distance & Pace Archive, Running',
-      captionMeta: '5K in 28 min · 10K in 59 min · Half Marathon in 2h 26m',
+      title: 'Running & Personal Bests',
+      captionTitle: 'Personal Bests & Pace Logs, Running',
+      captionMeta: '5K 27:35 · 10K 58:16 · Half Marathon 2:23:00',
       narrative:
-        'Lately I’ve been really into running. So far my best times are 28 minutes for 5K, 59 minutes for 10K, and 2 hours 26 minutes for a Half Marathon.',
+        'Lately I’ve been really into running. My current personal bests are 27 minutes 35 seconds for 5K, 58 minutes 16 seconds for 10K, and 2 hours 23 minutes for a Half Marathon.',
       imageSrc: runPhoto,
       imageAlt: 'Fariz Oktavian on a morning street run',
       aspectRatio: 'tall-portrait',
       detailNote:
         'Personal best milestones logged so far, still working on staying consistent and shaving off a few minutes next time.',
       stats: [
-        { label: '5K', value: '28 min' },
-        { label: '10K', value: '59 min' },
-        { label: 'Half Marathon', value: '2h 26m' },
+        { label: '5K', value: '27:35' },
+        { label: '10K', value: '58:16' },
+        { label: 'Half Marathon', value: '2:23:00' },
       ],
     },
     {
