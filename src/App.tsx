@@ -10,6 +10,7 @@ import { SplashScreen } from '@/components/organisms/SplashScreen'
 import { SPLASH_COMPLETE_EVENT } from '@/hooks/useSplashComplete'
 import { useCurrentPath } from '@/hooks/useCurrentPath'
 import { useSplashTrigger } from '@/hooks/useSplashTrigger'
+import { registerLenis } from '@/lib/scroll'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -45,6 +46,7 @@ export function App() {
     })
 
     lenisRef.current = lenis
+    registerLenis(lenis)
     const removeScrollListener = lenis.on('scroll', () =>
       ScrollTrigger.update(),
     )
@@ -58,6 +60,7 @@ export function App() {
     return () => {
       gsap.ticker.remove(raf)
       removeScrollListener()
+      registerLenis(null)
       lenis.destroy()
       lenisRef.current = null
     }

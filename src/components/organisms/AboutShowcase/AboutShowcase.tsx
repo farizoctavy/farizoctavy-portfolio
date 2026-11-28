@@ -667,17 +667,12 @@ export function AboutShowcase({ content }: AboutShowcaseProps) {
               </a>
             </div>
 
-            <div className="mt-14 grid grid-cols-1 gap-10 md:mt-20 md:grid-cols-12 md:gap-8">
+            <div className="mt-14 grid grid-cols-1 items-start gap-12 md:mt-20 md:grid-cols-12 md:gap-x-8 md:gap-y-16">
               {content.gallery.frames.map((frame) => (
-                <motion.a
-                  className={cn(
-                    'group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-border-10',
-                    frame.gridClass,
-                  )}
-                  href={getAppHref(frame.href)}
+                <motion.figure
+                  className={cn('group block', frame.gridClass)}
                   initial={prefersReducedMotion ? false : { opacity: 0, y: 28 }}
                   key={frame.id}
-                  onClick={(event) => handleInternalLink(event, frame.href)}
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                   viewport={{ amount: 0.15, once: false }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -690,26 +685,21 @@ export function AboutShowcase({ content }: AboutShowcaseProps) {
                   >
                     <img
                       alt={frame.imageAlt}
-                      className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                      className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       loading="lazy"
                       src={frame.imageSrc}
                     />
                   </div>
 
-                  <div className="mt-3 flex items-baseline justify-between gap-4 border-b border-title-80/40 pb-3">
+                  <figcaption className="mt-3 flex items-baseline justify-between gap-4 border-b border-title-80/40 pb-3">
                     <span className="text-body-m-regular text-border-10">
                       {frame.title}
                     </span>
-                    <span className="relative h-5 overflow-hidden text-right text-body-s-regular text-disable-50">
-                      <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                        {frame.meta}
-                      </span>
-                      <span className="block text-border-10 transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                        Explore ↗
-                      </span>
+                    <span className="text-right text-body-s-regular text-disable-50">
+                      {frame.meta}
                     </span>
-                  </div>
-                </motion.a>
+                  </figcaption>
+                </motion.figure>
               ))}
             </div>
 

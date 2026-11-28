@@ -44,7 +44,6 @@ export interface AboutGalleryFrame {
   imageAlt: string
   aspectClass: string
   gridClass: string
-  href: string
 }
 
 export interface AboutContent {
@@ -291,7 +290,6 @@ export const aboutContent: AboutContent = {
         imageAlt: 'Architectural white stairs in afternoon light',
         aspectClass: 'aspect-[4/5]',
         gridClass: 'md:col-span-5',
-        href: '/my-interest',
       },
       {
         id: 'frame-monument',
@@ -300,8 +298,7 @@ export const aboutContent: AboutContent = {
         imageSrc: photographySix,
         imageAlt: 'Symmetrical white monument facade',
         aspectClass: 'aspect-[4/5]',
-        gridClass: 'md:col-span-5 md:col-start-8 md:mt-24',
-        href: '/my-interest',
+        gridClass: 'md:col-span-5 md:col-start-8 md:mt-20',
       },
       {
         id: 'frame-compfest',
@@ -310,8 +307,7 @@ export const aboutContent: AboutContent = {
         imageSrc: achievementPhoto,
         imageAlt: 'Team A holding Best Team award at UX Academy COMPFEST 18',
         aspectClass: 'aspect-[3/2]',
-        gridClass: 'md:col-span-7 md:mt-8',
-        href: '/my-interest',
+        gridClass: 'md:col-span-7',
       },
       {
         id: 'frame-windows',
@@ -320,8 +316,7 @@ export const aboutContent: AboutContent = {
         imageSrc: photographyFive,
         imageAlt: 'Vintage building windows in warm film tones',
         aspectClass: 'aspect-[4/5]',
-        gridClass: 'md:col-span-4 md:col-start-9 md:-mt-12',
-        href: '/my-interest',
+        gridClass: 'md:col-span-4 md:col-start-9 md:mt-16',
       },
       {
         id: 'frame-indomaret',
@@ -330,8 +325,7 @@ export const aboutContent: AboutContent = {
         imageSrc: photographyMain,
         imageAlt: 'Evening street corner storefront captured on a walk',
         aspectClass: 'aspect-[4/5]',
-        gridClass: 'md:col-span-5 md:col-start-2 md:mt-12',
-        href: '/my-interest',
+        gridClass: 'md:col-span-5 md:col-start-2',
       },
       {
         id: 'frame-setup',
@@ -340,8 +334,7 @@ export const aboutContent: AboutContent = {
         imageSrc: setupPhoto,
         imageAlt: 'Dual monitor desk setup running web and AI experiments',
         aspectClass: 'aspect-[4/3]',
-        gridClass: 'md:col-span-5 md:col-start-8 md:mt-24',
-        href: '/my-interest',
+        gridClass: 'md:col-span-5 md:col-start-8 md:mt-16',
       },
     ],
   },
