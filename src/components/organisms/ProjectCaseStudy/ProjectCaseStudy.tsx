@@ -1,4 +1,4 @@
-import { useRef, useState, type MouseEvent } from 'react'
+import { useMemo, useRef, useState, type MouseEvent } from 'react'
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline'
 import {
   AnimatePresence,
@@ -9,6 +9,10 @@ import {
   useSpring,
 } from 'motion/react'
 
+import {
+  CaseStudyBreadcrumb,
+  type BreadcrumbSectionItem,
+} from '@/components/molecules/CaseStudyBreadcrumb'
 import { DesignPlansViewer } from '@/components/molecules/DesignPlansViewer'
 import { OdometerFigure } from '@/components/molecules/OdometerFigure'
 import type { CaseStudyContent } from '@/data/caseStudies'
@@ -68,9 +72,45 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
   const activeSliderImage =
     content.gallery.images[sliderIndex] ?? content.gallery.images[0]
 
+  const breadcrumbSections = useMemo<BreadcrumbSectionItem[]>(() => {
+    const items: BreadcrumbSectionItem[] = [
+      { id: 'case-study-overview', code: '00', label: 'Overview' },
+    ]
+
+    if (content.plansViewer) {
+      items.push({
+        id: 'case-study-plans',
+        code: 'BP',
+        label: 'Process Boards',
+      })
+    }
+
+    for (const chapter of content.chapters) {
+      const cleanLabel = chapter.eyebrow
+        .replace(/^\d+\s*[—–-]\s*/, '')
+        .trim()
+      items.push({
+        id: chapter.id,
+        code: chapter.number,
+        label: cleanLabel || chapter.heading,
+      })
+    }
+
+    items.push({
+      id: 'case-study-gallery',
+      code: 'VA',
+      label: 'Visual Archive',
+    })
+
+    return items
+  }, [content.chapters, content.plansViewer])
+
+  const projectTitle = content.titleLines.join(' ')
+  const nextProjectTitle = content.nextProject.titleLines.join(' ')
+
   return (
     <article
-      aria-label={`${content.titleLines.join(' ')} Case Study`}
+      aria-label={`${projectTitle} Case Study`}
       className="relative w-full"
     >
       {/* Top 3px Scroll Progress Hairline (Vision Mansion .yap) */}
@@ -80,6 +120,46 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
         style={{ scaleX: prefersReducedMotion ? 0 : smoothProgress }}
       />
 
+      {/* ARCHITECTURAL BREADCRUMB (Desktop: Top Strip + Right Rail | Mobile: Bottom Floating Dock) */}
+      <CaseStudyBreadcrumb
+        backHref="/"
+        backLabel="Back to Portfolio"
+        currentTitle={projectTitle}
+        mobileDockExtension={
+          isGalleryInView ? (
+            <div
+              aria-label="Mobile gallery view mode"
+              className="flex items-center gap-0.5 pr-1"
+              role="tablist"
+            >
+              {(['detail', 'masonry', 'slider'] as GalleryMode[]).map((mode) => {
+                const isActive = galleryMode === mode
+                return (
+                  <button
+                    aria-selected={isActive}
+                    className={cn(
+                      'touch-target rounded-full px-2.5 py-1.5 text-body-s-regular capitalize transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-primary-main',
+                      isActive
+                        ? 'bg-primary-main text-border-10'
+                        : 'text-title-90 hover:bg-border-20',
+                    )}
+                    key={`mob-dock-${mode}`}
+                    onClick={() => setGalleryMode(mode)}
+                    role="tab"
+                    type="button"
+                  >
+                    {mode}
+                  </button>
+                )
+              })}
+            </div>
+          ) : undefined
+        }
+        nextProjectHref={content.nextProject.href}
+        nextProjectTitle={nextProjectTitle}
+        sections={breadcrumbSections}
+      />
+
       {/* 1. STATIONARY EDITORIAL HERO (Uncropped Above-the-Fold + Rising Curtain) */}
       <section
         aria-labelledby="case-study-hero-title"
@@ -87,14 +167,14 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
       >
         <motion.div
           animate="visible"
-          className="content-container flex flex-col gap-6 pt-5 pb-6 md:gap-8 md:pt-8 md:pb-10"
+          className="content-container flex flex-col gap-5 pt-4 pb-8 md:gap-6 md:pt-6 md:pb-10"
           initial={prefersReducedMotion ? false : 'hidden'}
           variants={revealContainerVariants}
         >
           {/* Top Row: Stacked 2-Line Project Title + Giant Odometer Metric */}
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <motion.h1
-              className="text-[clamp(2.25rem,5.5vw,4.5rem)] font-normal leading-[0.94] tracking-[-0.035em] text-title-100"
+              className="text-[clamp(2rem,4.8vw,4rem)] font-normal leading-[0.94] tracking-[-0.035em] text-title-100"
               id="case-study-hero-title"
               variants={revealItemVariants}
             >
@@ -125,7 +205,7 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
             <motion.img
               alt={content.heroImage.alt}
               animate={{ opacity: 1, scale: 1 }}
-              className="block h-auto max-h-[calc(100dvh-15.5rem)] w-auto max-w-full md:max-h-[calc(100dvh-16.5rem)]"
+              className="block h-auto max-h-[calc(100dvh-17.5rem)] w-auto max-w-full lg:max-h-[calc(100dvh-20.5rem)]"
               initial={prefersReducedMotion ? false : { opacity: 0.45, scale: 1.02 }}
               src={content.heroImage.src}
               transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
@@ -140,6 +220,7 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
         <section
           aria-label="Project overview and metadata"
           className="content-container py-20 md:py-32 lg:py-40"
+          id="case-study-overview"
         >
           <motion.div
             animate={prefersReducedMotion ? 'visible' : undefined}
@@ -192,7 +273,10 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
 
         {/* 3. INTERACTIVE DESIGN PLANS / PROCESS BOARDS VIEWER (.uww) */}
         {content.plansViewer && (
-          <div className="border-y border-border-30 bg-border-10">
+          <div
+            className="border-y border-border-30 bg-border-10"
+            id="case-study-plans"
+          >
             <DesignPlansViewer
               slides={content.plansViewer.slides}
               subtitle={content.plansViewer.subtitle}
@@ -357,6 +441,7 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
         <section
           aria-labelledby="case-study-gallery-heading"
           className="border-t border-border-30 py-20 md:py-28 lg:py-36"
+          id="case-study-gallery"
           ref={gallerySectionRef}
         >
           <div className="content-container">
@@ -590,13 +675,13 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
             </LayoutGroup>
           </div>
 
-          {/* Floating Bottom Pill Switcher (Vision Mansion .cew > .dam) */}
+          {/* Desktop Floating Bottom Pill Switcher (Vision Mansion .cew > .dam, hidden on mobile where it lives inside the mobile bottom dock) */}
           <AnimatePresence>
             {isGalleryInView && (
               <motion.div
                 animate={{ opacity: 1, y: 0 }}
                 aria-label="Floating gallery view switcher"
-                className="fixed bottom-5 left-1/2 z-40 -translate-x-1/2 rounded-[6px] border border-border-30 bg-border-20/95 px-2.5 py-1.5 shadow-soft backdrop-blur-header"
+                className="fixed bottom-5 left-1/2 z-40 hidden -translate-x-1/2 rounded-[6px] border border-border-30 bg-border-20/95 px-2.5 py-1.5 shadow-soft backdrop-blur-header lg:block"
                 exit={{ opacity: 0, y: 20 }}
                 initial={{ opacity: 0, y: 20 }}
                 role="tablist"
@@ -634,7 +719,7 @@ export function ProjectCaseStudy({ content }: ProjectCaseStudyProps) {
         {/* 6. BOTTOM "NEXT WORK" TRANSITION BANNER (Vision Mansion .kma) */}
         <section
           aria-label="Next project"
-          className="content-container border-t border-border-30 py-20 md:py-28 lg:py-36"
+          className="content-container border-t border-border-30 pt-20 pb-28 md:pt-28 md:pb-32 lg:py-36"
         >
           <a
             className="group inline-block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-main"

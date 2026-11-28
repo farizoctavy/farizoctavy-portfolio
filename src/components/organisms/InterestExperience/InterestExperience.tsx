@@ -15,6 +15,7 @@ import { Button } from '@/components/atoms/Button'
 import { Icon } from '@/components/atoms/Icon'
 import { RollingText } from '@/components/atoms/RollingText'
 import type {
+  FloatingDepthPlane,
   FloatingGalleryPhoto,
   InterestChapter,
   InterestPageContent,
@@ -39,7 +40,55 @@ interface FloatingBackdropItemProps {
   pointerX: MotionValue<number>
   pointerY: MotionValue<number>
   scrollProgress: MotionValue<number>
+  totalStages: number
   viewportHeight: number
+}
+
+const PART_OFFSET_PX: Record<FloatingDepthPlane, number> = {
+  far: 64,
+  mid: 48,
+  near: 30,
+}
+
+const getWrappedVh = (initialYVh: number, progress: number, travelVh: number) =>
+  ((((initialYVh - progress * travelVh - LOOP_MIN_VH) % LOOP_SPAN_VH) +
+    LOOP_SPAN_VH) %
+    LOOP_SPAN_VH) +
+  LOOP_MIN_VH
+
+// Strictly monotonic (0 -> 1) outward parting during the opening intro scroll:
+// photos slide smoothly outward once triggered and hold that parted lane with zero bounce-back.
+const getIntroPartFactor = (progress: number, totalStages: number) => {
+  const step = 1 / Math.max(1, totalStages - 1)
+  const introTriggerEnd = step * 0.8
+  const t = clamp(progress / introTriggerEnd, 0, 1)
+  return 1 - (1 - t) ** 3
+}
+
+const DEPTH_PLANE_STYLES: Record<
+  FloatingDepthPlane,
+  {
+    frameClass: string
+    imageClass: string
+    layerClass: string
+  }
+> = {
+  far: {
+    layerClass: 'z-[1] opacity-35',
+    frameClass: 'border border-border-30/60 bg-border-20',
+    imageClass:
+      'scale-105 grayscale contrast-90 brightness-105 blur-[3.5px]',
+  },
+  mid: {
+    layerClass: 'z-[2] opacity-60 lg:opacity-65',
+    frameClass: 'border border-border-30/70 bg-border-20 shadow-card',
+    imageClass: 'scale-[1.02] grayscale-[60%] contrast-95 blur-[1.25px]',
+  },
+  near: {
+    layerClass: 'z-[3] opacity-80 md:opacity-90 lg:opacity-95',
+    frameClass: 'bg-border-20 shadow-soft',
+    imageClass: 'grayscale-0 blur-0',
+  },
 }
 
 function FloatingBackdropItem({
@@ -47,25 +96,35 @@ function FloatingBackdropItem({
   pointerX,
   pointerY,
   scrollProgress,
+  totalStages,
   viewportHeight,
 }: FloatingBackdropItemProps) {
-  const x = useTransform(pointerX, (px) => px * 32 * item.depth)
+  const planeStyle = DEPTH_PLANE_STYLES[item.depthPlane]
+  const side = item.horizontalClass.includes('right-') ? 1 : -1
+  const partOffset = PART_OFFSET_PX[item.depthPlane]
+
+  // Horizontal pointer parallax + monotonic outward parting (no bounce-back)
+  const x = useTransform(
+    [pointerX, scrollProgress],
+    ([px, progress]: number[]) => {
+      const partFactor = getIntroPartFactor(progress, totalStages)
+      const partPx = side * partOffset * partFactor
+      return px * 32 * item.depth + partPx
+    },
+  )
 
   // Continuous bottom-to-top scroll conveyor that loops off-screen (-30vh -> +130vh)
   const y = useTransform(
     [pointerY, scrollProgress],
     ([py, progress]: number[]) => {
-      const rawVh = item.initialYVh - progress * item.travelVh
-      const wrappedVh =
-        ((((rawVh - LOOP_MIN_VH) % LOOP_SPAN_VH) + LOOP_SPAN_VH) %
-          LOOP_SPAN_VH) +
-        LOOP_MIN_VH
+      const wrappedVh = getWrappedVh(item.initialYVh, progress, item.travelVh)
       const scrollPx = (wrappedVh / 100) * viewportHeight
       const pointerPx = py * 26 * item.depth
       return scrollPx + pointerPx
     },
   )
 
+  // Subtle pointer tilt without oscillatory wobble
   const rotate = useTransform(pointerX, (px) => px * 1.4 * item.depth)
 
   return (
@@ -73,24 +132,24 @@ function FloatingBackdropItem({
       aria-hidden="true"
       className={cn(
         'pointer-events-none absolute top-0 hidden overflow-hidden will-change-transform md:block',
+        planeStyle.layerClass,
         item.horizontalClass,
         item.sizeClass,
-        item.opacityClass,
       )}
       style={{ rotate, x, y }}
     >
       <div
         className={cn(
-          'w-full overflow-hidden bg-border-20 shadow-card',
+          'w-full overflow-hidden',
           item.aspectClass,
-          item.isGhost && 'border border-border-30/80',
+          planeStyle.frameClass,
         )}
       >
         <img
           alt=""
           className={cn(
             'h-full w-full object-cover object-center',
-            item.isGhost && 'opacity-55 blur-[0.5px]',
+            planeStyle.imageClass,
           )}
           loading="lazy"
           src={item.imageSrc}
@@ -121,57 +180,79 @@ function StageLayer({
   totalStages,
   viewportHeight,
 }: StageLayerProps) {
-  const segment = 1 / totalStages
-  const start = index * segment
-  const end = (index + 1) * segment
-  const enterEnd = start + segment * 0.28
-  const exitStart = end - segment * 0.28
+  const step = 1 / Math.max(1, totalStages - 1)
+  const center = index * step
 
   const isFirst = index === 0
+  const isSecond = index === 1
   const isLast = index === totalStages - 1
-  const travelDistance = Math.round(viewportHeight * 0.44)
 
-  // Continuous bottom -> center reading glide -> top exit
+  const exitDistance = Math.round(viewportHeight * 0.72)
+  const firstPeekOffset = Math.round(viewportHeight * 0.74)
+  const chapterPeekOffset = Math.round(viewportHeight * 0.82)
+  const offscreenBottom = Math.round(viewportHeight * 1.18)
+
+  // Unified lockstep conveyor centered at evenly spaced stops (0, 0.25, 0.5, 0.75, 1):
+  // Generous vertical gallery spacing while keeping fluid, continuous motion with zero lag.
   const scrollY = useTransform(
     scrollProgress,
     isFirst
-      ? [0, exitStart, end]
-      : isLast
-        ? [start, enterEnd, 1]
-        : [start, enterEnd, exitStart, end],
+      ? [0, step]
+      : isSecond
+        ? [0, center, center + step]
+        : isLast
+          ? [center - 2 * step, center - step, 1]
+          : [center - 2 * step, center - step, center, center + step],
     isFirst
-      ? [0, -10, -travelDistance]
-      : isLast
-        ? [travelDistance, 8, 0]
-        : [travelDistance, 8, -10, -travelDistance],
+      ? [0, -exitDistance]
+      : isSecond
+        ? [firstPeekOffset, 0, -exitDistance]
+        : isLast
+          ? [offscreenBottom, chapterPeekOffset, 0]
+          : [offscreenBottom, chapterPeekOffset, 0, -exitDistance],
   )
 
   const opacity = useTransform(
     scrollProgress,
     isFirst
-      ? [0, exitStart, end]
-      : isLast
-        ? [start, enterEnd, 1]
-        : [start, enterEnd, exitStart, end],
+      ? [0, step * 0.42, step * 0.88]
+      : isSecond
+        ? [0, center * 0.78, center, center + step * 0.42, center + step * 0.88]
+        : isLast
+          ? [center - 2 * step, center - step, center - step * 0.22, 1]
+          : [
+              center - 2 * step,
+              center - step,
+              center - step * 0.22,
+              center,
+              center + step * 0.42,
+              center + step * 0.88,
+            ],
     isFirst
-      ? [1, 1, 0]
-      : isLast
-        ? [0, 1, 1]
-        : [0, 1, 1, 0],
+      ? [1, 0.55, 0]
+      : isSecond
+        ? [0.34, 0.92, 1, 0.55, 0]
+        : isLast
+          ? [0, 0.32, 0.92, 1]
+          : [0, 0.32, 0.92, 1, 0.55, 0],
   )
 
   const scale = useTransform(
     scrollProgress,
     isFirst
-      ? [0, exitStart, end]
-      : isLast
-        ? [start, enterEnd, 1]
-        : [start, enterEnd, exitStart, end],
+      ? [0, step]
+      : isSecond
+        ? [0, center, center + step]
+        : isLast
+          ? [center - 2 * step, center - step, 1]
+          : [center - 2 * step, center - step, center, center + step],
     isFirst
-      ? [1, 1, 0.95]
-      : isLast
-        ? [0.95, 1, 1]
-        : [0.95, 1, 1, 0.95],
+      ? [1, 0.94]
+      : isSecond
+        ? [0.92, 1, 0.94]
+        : isLast
+          ? [0.88, 0.92, 1]
+          : [0.88, 0.92, 1, 0.94],
   )
 
   // Subtle pointer-follow coupled with vertical scroll glide
@@ -213,16 +294,16 @@ export function InterestExperience({ content }: InterestExperienceProps) {
     return () => window.removeEventListener('resize', updateViewport)
   }, [])
 
-  // Spring-smoothed scroll progress (0 -> 1)
+  // Crisp, responsive spring on top of Lenis (zero mushy lag between sections)
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ['start start', 'end end'],
   })
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
-    mass: 0.45,
+    stiffness: 280,
+    damping: 34,
+    mass: 0.12,
   })
 
   // Spring-smoothed normalized pointer (-1 -> 1)
@@ -241,15 +322,16 @@ export function InterestExperience({ content }: InterestExperienceProps) {
 
   const centerPhotoX = useTransform(smoothPointerX, (px) => px * -12)
   const centerPhotoY = useTransform(smoothPointerY, (py) => py * -10)
+  const stageStep = 1 / Math.max(1, totalStages - 1)
   const timelineFillScaleX = useTransform(
     smoothProgress,
-    [1 / totalStages, 1],
+    [stageStep, 1],
     [0, 1],
   )
 
   useMotionValueEvent(smoothProgress, 'change', (latest) => {
     const nextStage = clamp(
-      Math.floor(latest * totalStages * 0.999),
+      Math.round(latest * (totalStages - 1)),
       0,
       totalStages - 1,
     )
@@ -314,12 +396,7 @@ export function InterestExperience({ content }: InterestExperienceProps) {
 
     const trackTop = track.getBoundingClientRect().top + window.scrollY
     const maxScroll = Math.max(1, track.offsetHeight - window.innerHeight)
-    const targetProgress =
-      stageIndex === 0
-        ? 0
-        : stageIndex === totalStages - 1
-          ? 1
-          : (stageIndex + 0.5) / totalStages
+    const targetProgress = stageIndex / Math.max(1, totalStages - 1)
     const targetY = trackTop + clamp(targetProgress, 0, 1) * maxScroll
 
     window.scrollTo({
@@ -398,7 +475,7 @@ export function InterestExperience({ content }: InterestExperienceProps) {
       <div
         className="relative w-full"
         ref={trackRef}
-        style={{ height: `${totalStages * 120}dvh` }}
+        style={{ height: `${totalStages * 108}dvh` }}
       >
         <div className="sticky top-0 flex h-dvh w-full flex-col justify-between overflow-hidden bg-border-10">
           {/* Infinite Bottom-to-Top Rising Gallery Photos + Pointer Parallax */}
@@ -416,12 +493,13 @@ export function InterestExperience({ content }: InterestExperienceProps) {
                 pointerX={smoothPointerX}
                 pointerY={smoothPointerY}
                 scrollProgress={smoothProgress}
+                totalStages={totalStages}
                 viewportHeight={viewportHeight}
               />
             ))}
 
             {/* Soft central radial wash so Inter Tight text stays crisp */}
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-border-10)_44%,transparent_82%)]" />
+            <div className="pointer-events-none absolute inset-0 z-[4] bg-[radial-gradient(ellipse_at_center,var(--color-border-10)_42%,transparent_80%)]" />
           </motion.div>
 
           {/* CONTINUOUS BOTTOM-TO-TOP SCRUBBED CENTER STAGES */}
@@ -438,7 +516,7 @@ export function InterestExperience({ content }: InterestExperienceProps) {
             >
               <motion.div
                 animate="visible"
-                className="content-container flex max-w-6xl flex-col items-center text-center"
+                className="content-container -mt-8 flex max-w-6xl flex-col items-center text-center md:-mt-12"
                 initial="hidden"
                 variants={revealContainerVariants}
               >
@@ -504,7 +582,7 @@ export function InterestExperience({ content }: InterestExperienceProps) {
                   totalStages={totalStages}
                   viewportHeight={viewportHeight}
                 >
-                  <div className="flex w-full max-w-2xl flex-col items-center text-center">
+                  <div className="-mt-8 flex w-full max-w-2xl flex-col items-center text-center md:-mt-10">
                     <motion.button
                       aria-label={`Learn more about ${chapter.title}`}
                       className={cn(
